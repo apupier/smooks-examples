@@ -21,6 +21,10 @@ jobs:
       - name: Build
         run: mvn install -B
       - name: Test non-Maven project
+        env:
+          CITRUS_CAMEL_JBANG_DUMP_INTEGRATION_OUTPUT: "true"
+          CITRUS_TESTCONTAINERS_REGISTRY_MIRROR_ENABLED: "true"
+          CITRUS_TESTCONTAINERS_REGISTRY_MIRROR: "mirror.gcr.io"
         run: |
          echo "Install JBang via SDKMAN"
 
