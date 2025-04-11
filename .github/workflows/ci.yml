@@ -20,6 +20,27 @@ jobs:
           java-version: 17
       - name: Build
         run: mvn install -B
+      - name: Test non-Maven project
+        run: |
+         echo "Install JBang via SDKMAN"
+
+         curl -s "https://get.sdkman.io" | bash 
+         source "/home/runner/.sdkman/bin/sdkman-init.sh"
+         sdk install jbang
+
+         jbang --version
+
+         jbang trust add https://github.com/citrusframework/citrus/
+         jbang trust add https://github.com/apache/camel/
+
+         jbang citrus@citrusframework/citrus --version
+         jbang camel@apache/camel --version
+
+         echo "Running tests"
+
+         pushd camel/camel-edi-x12-as2/test
+         jbang citrus@citrusframework/citrus run edi-x12-as2.camel.it.yaml
+         popd
   generate_uml_diagrams:
     if: github.repository == 'smooks/smooks-examples' && github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
